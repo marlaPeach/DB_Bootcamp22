@@ -1,3 +1,15 @@
+/*Locations values*/
+INSERT INTO Locations (LocationName)
+VALUES('Abingdon');
+INSERT INTO Locations (LocationName)
+VALUES('Gillamoor');
+INSERT INTO Locations (LocationName)
+VALUES('Keld');
+INSERT INTO Locations (LocationName)
+VALUES('Hillfar');
+INSERT INTO Locations (LocationName)
+VALUES('Islesbury');
+
 /* Taverns values*/
 INSERT INTO Taverns (TavernName, FloorCount, OwnerID, LocationID)
 VALUES('The Green Dragon', 2, 1, 1);
@@ -84,17 +96,7 @@ VALUES('Waitress', 'Serves the food.');
 INSERT INTO Roles (RoleName, RoleDescription)
 VALUES('Member', 'Uses the services.');
 
-/*Locations values*/
-INSERT INTO Locations (LocationName)
-VALUES('Abingdon');
-INSERT INTO Locations (LocationName)
-VALUES('Gillamoor');
-INSERT INTO Locations (LocationName)
-VALUES('Keld');
-INSERT INTO Locations (LocationName)
-VALUES('Hillfar');
-INSERT INTO Locations (LocationName)
-VALUES('Islesbury');
+
 
 /*Rats values*/
 INSERT INTO Rats (RatName, TavernID)
