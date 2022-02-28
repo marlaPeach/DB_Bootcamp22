@@ -13,29 +13,29 @@ DROP TABLE IF EXISTS SalesHistory;
 DROP TABLE IF EXISTS Orders;
 
 CREATE TABLE Locations (
-ID integer PRIMARY KEY Identity(1,1),
+ID integer Identity(1,1),
 LocationName varchar(255)
 );
 
 CREATE TABLE Taverns (
-ID integer PRIMARY KEY Identity(1,1),
+ID integer Identity(1,1),
 TavernName varchar(255),
 FloorCount integer,
 OwnerID integer,
-LocationID integer FOREIGN KEY REFERENCES Locations(ID)
+LocationID integer
 );
 
 CREATE TABLE Roles (
-ID integer PRIMARY KEY Identity(1,1),
+ID integer Identity(1,1),
 RoleName varchar(255),
 RoleDescription varchar(255)
 );
 
 CREATE TABLE Users (
-ID integer PRIMARY KEY Identity(1,1),
+ID integer Identity(1,1),
 UserName varchar(255),
-TavernID integer FOREIGN KEY REFERENCES Taverns(ID),
-RoleID integer FOREIGN KEY REFERENCES Roles(ID)
+TavernID integer,
+RoleID integer
 );
 
 
