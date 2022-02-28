@@ -100,6 +100,31 @@ VALUES
 	(4, 'Hair Braiding', 5.00, 1),
 	(7, 'Tattooing', 6.50, 1);
 
+/*Employee values*/
+INSERT INTO Employees(EmployeeName, TavernID, RoleID)
+VALUES
+	('Lyndal', 1, 1),
+	('Yetta', 2, 1),
+	('Lena', 3, 1),
+	('Sunniva', 4, 1),
+	('Edlyn', 5, 1),
+	('Mildred', 6, 1),
+	('Wren', 7, 1),
+	('Gethin', 1, 2),
+	('Llewella', 2, 2),
+	('Gwendolen', 3, 2),
+	('Ithel', 4, 2),
+	('Branson', 5, 2),
+	('Ingrid', 6, 2),
+	('Oscar', 7, 2),
+	('Ingeborg', 1, 3),
+	('Vragi', 2, 3),
+	('Helga', 3, 3),
+	('Alf', 4, 3),
+	('Hella', 5, 3),
+	('Asdis', 6, 3),
+	('Sigrid', 7, 3);
+
 /*ServiceStatus values*/
 INSERT INTO ServiceStatus(StatusName)
 VALUES
@@ -109,9 +134,9 @@ VALUES
 /*Supplies values*/
 INSERT INTO Supplies(ItemName, Unit, CostPerUnit, TotalInventory, LastUpdated)
 VALUES
-	('Strong Ale', 'Ounces', 240, .80, '7/9/1612'),
-	('Brown Bread', 'Loaf', 72, 1.00, '10/20/1620'),
-	('Soup', 'Ounces', 587, 3.00, '4/10/1625');
+	('Strong Ale', 'Ounces', 1.50, 240, '7/9/1612'),
+	('Brown Bread', 'Loaf', 1.00, 72, '10/20/1620'),
+	('Soup', 'Ounces', 3.00, 587, '4/10/1625');
 
 /*TavernSupplies values*/
 INSERT INTO TavernSupplies(TavernID, SupplyID, InventoryCount, LastUpdated)
@@ -136,8 +161,8 @@ VALUES
 	(4, 2, 10, '12/27/2021'),
 	(1,3, 42, '02/05/2022');
 
-/*SalesHistory values*/
-INSERT INTO SalesHistory(TavernID, Guest, ServiceID, TotalSale, SaleDate)
+/*ServiceSales values*/
+INSERT INTO ServiceSales(TavernID, Guest, ServiceID, TotalSale, SaleDate)
 VALUES
 	(1,'Egilhard', 3, 3.00, '02/05/2022'),
 	(3,'Gerde', 4, 4.00, '02/16/2022'),
@@ -145,16 +170,21 @@ VALUES
 	(5,'Talea', 5, 6.00, '01/26/2022'),
 	(1,'Arna', 1, 1.00, '12/25/2021');
 
+/*SupplySales values*/
+INSERT INTO SupplySales(TavernID, Guest, SupplyID, TotalSale, SaleDate)
+VALUES
+	(1,'Egilhard', 3, 3.00, '02/05/2022'),
+	(3,'Gerde', 2, 1.00, '02/16/2022'),
+	(7,'Germund', 1, 1.50, '02/20/2022'),
+	(5,'Talea', 1, 1.50, '01/26/2022'),
+	(1,'Arna', 3, 3.00, '12/25/2021');
+
 /*Orders values*/
 INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(1, 1, 10.00, 2, '12/25/2021');
-INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(3, 2, 8.00, 4, '12/14/2021');
-INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(5, 1, 10.00, 2, '12/01/2021');
-INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(6, 3, 15.00, 6, '12/28/2021');
-INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(1, 1, 5.00, 3, '01/16/2022');
-INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
-VALUES(7, 3, 15.00, 6, '01/22/2022');
+VALUES
+	(1, 1, 10.00, 2, '12/25/2021'),
+	(3, 2, 8.00, 4, '12/14/2021'),
+	(5, 1, 10.00, 2, '12/01/2021'),
+	(6, 3, 15.00, 6, '12/28/2021'),
+	(1, 1, 5.00, 3, '01/16/2022'),
+	(7, 3, 15.00, 6, '01/22/2022');

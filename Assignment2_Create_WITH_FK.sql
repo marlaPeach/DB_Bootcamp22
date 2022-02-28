@@ -2,7 +2,8 @@
 CREATE SCHEMA DBBootCamp;*/
 
 DROP TABLE IF EXISTS Orders;
-DROP TABLE IF EXISTS SalesHistory;
+DROP TABLE IF EXISTS ServiceSales;
+DROP TABLE IF EXISTS SupplySales;
 DROP TABLE IF EXISTS TavernSupplies;
 DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS TavernService; /*Services is a reserved word and isn't best practices, so used TavernService as a table name instead.*/
@@ -100,11 +101,20 @@ TavernID integer FOREIGN KEY REFERENCES Taverns(ID),
 LastUpdated date
 );
 
-CREATE TABLE SalesHistory (
+CREATE TABLE ServiceSales (
 ID integer PRIMARY KEY Identity(1,1),
 TavernID integer FOREIGN KEY REFERENCES Taverns(ID),
 Guest varchar(255),
 ServiceID integer FOREIGN KEY REFERENCES TavernService(ID),
+TotalSale money,
+SaleDate date
+);
+
+CREATE TABLE SupplySales (
+ID integer PRIMARY KEY Identity(1,1),
+TavernID integer FOREIGN KEY REFERENCES Taverns(ID),
+Guest varchar(255),
+SupplyID integer FOREIGN KEY REFERENCES Supplies(ID),
 TotalSale money,
 SaleDate date
 );

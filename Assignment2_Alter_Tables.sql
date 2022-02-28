@@ -9,13 +9,11 @@ ALTER TABLE	TavernService ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
 ALTER TABLE	TavernService ADD FOREIGN KEY (StatusID) REFERENCES ServiceStatus(ID);
 ALTER TABLE	TavernSupplies ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
 ALTER TABLE	TavernSupplies ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
-ALTER TABLE	SalesHistory ADD FOREIGN KEY (ServiceID) REFERENCES TavernService(ID);
-ALTER TABLE	SalesHistory ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
+ALTER TABLE	ServiceSales ADD FOREIGN KEY (ServiceID) REFERENCES TavernService(ID);
+ALTER TABLE	ServiceSales ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
 ALTER TABLE	Orders ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
+ALTER TABLE	SupplySales ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
+ALTER TABLE	SupplySales ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
 
+/*Stuck as to why this one alter statement will not work.*/
 ALTER TABLE	Orders ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
-
-
-SELECT * FROM Guests;
-
-select 

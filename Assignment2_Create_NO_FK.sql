@@ -2,7 +2,8 @@
 CREATE SCHEMA DBBootCamp;*/
 
 DROP TABLE IF EXISTS Orders;
-DROP TABLE IF EXISTS SalesHistory;
+DROP TABLE IF EXISTS ServiceSales;
+DROP TABLE IF EXISTS SupplySales;
 DROP TABLE IF EXISTS TavernSupplies;
 DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS TavernService; /*Services is a reserved word and isn't best practices, so used TavernService as a table name instead.*/
@@ -45,7 +46,8 @@ ID integer PRIMARY KEY Identity(1,1),
 GuestName varchar(255),
 Birthday date,
 CakeDay date,
-StatusID integer
+StatusID integer,
+Notes varchar(500)
 );
 
 CREATE TABLE GuestClasses (
@@ -100,11 +102,20 @@ TavernID integer,
 LastUpdated date
 );
 
-CREATE TABLE SalesHistory (
+CREATE TABLE ServiceSales (
 ID integer PRIMARY KEY Identity(1,1),
 TavernID integer,
 Guest varchar(255),
 ServiceID integer,
+TotalSale money,
+SaleDate date
+);
+
+CREATE TABLE SupplySales (
+ID integer PRIMARY KEY Identity(1,1),
+TavernID integer,
+Guest varchar(255),
+SupplyID integer,
 TotalSale money,
 SaleDate date
 );
