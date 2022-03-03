@@ -577,7 +577,7 @@ WHERE LocationID = 2;
 */
 
 
-select * from Guests;
+SELECT * FROM Guests;
 UPDATE Guests
 SET GuestName = 'Audie'
 WHERE GuestName = 'Dunstan';
@@ -587,27 +587,28 @@ SET Notes = 'Ask for a last name.'
 WHERE GuestName = 'Linn';
 
 --Guests with birthdays before 2000.
-select * from Guests
-where Birthday < '2000-01-01';
+SELECT * FROM Guests
+WHERE Birthday < '2000-01-01';
 
 --Rooms that cost more than 100 gold per night.
-select * from Rooms
-where RoomRate > 100;
+SELECT * FROM Rooms
+WHERE RoomRate > 100;
 
 --Unique guest names.
-select distinct GuestName
-from Guests;
+SELECT DISTINCT GuestName
+FROM Guests;
 
 --Return all guests ordered by name (ascending)
-select * from Guests
-order by GuestName asc;
+SELECT * FROM Guests
+ORDER BY GuestName ASC;
 
 --Select top 10 highest price sales.
-select top 10 RoomRate
-from RoomStays;
+SELECT TOP 10 RoomRate
+FROM RoomStays;
 
 --Combine lookup tables.
-select * from Locations, RoomStatus, GuestStatus, Classes, Roles;
+SELECT * FROM Locations, RoomStatus, GuestStatus, Classes, Roles;
+
 
 --Guest Classes with a new column for level grouping.
 select ID, GuestID, ClassID, ClassLevel,
@@ -622,7 +623,8 @@ from GuestClasses;
 
 --Optional query.
 --WIP
+--select TABLE_NAME from information_schema.columns
+--select Concat('CREATE TABLE ''',TABLE_NAME, '''') from information_schema.columns;
 
-select * from information_schema.columns;
-select * from Taverns;
-
+--select * from information_schema.columns;
+--select TavernName from Taverns;
