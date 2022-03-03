@@ -10,11 +10,14 @@ DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS TavernService;
 DROP TABLE IF EXISTS ServiceStatus;
 DROP TABLE IF EXISTS GuestClasses;
+DROP TABLE IF EXISTS RoomStays;
 DROP TABLE IF EXISTS Guests;
 DROP TABLE IF EXISTS Classes;
 DROP TABLE IF EXISTS GuestStatus;
 DROP TABLE IF EXISTS Employees;
 DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS Rooms;
+DROP TABLE IF EXISTS RoomStatus;
 DROP TABLE IF EXISTS Taverns;
 DROP TABLE IF EXISTS Locations;
 
@@ -30,6 +33,18 @@ TavernName varchar(255),
 FloorCount integer,
 OwnerID integer,
 LocationID integer
+);
+
+CREATE TABLE Rooms (
+ID integer PRIMARY KEY Identity(1,1),
+TavernID integer,
+StatusID integer,
+RoomRate money
+);
+
+CREATE TABLE RoomStatus (
+ID integer PRIMARY KEY Identity(1,1),
+StatusName varchar(255)
 );
 
 CREATE TABLE GuestStatus (
@@ -49,6 +64,14 @@ Birthday date,
 CakeDay date,
 StatusID integer,
 Notes varchar(500)
+);
+
+CREATE TABLE RoomStays (
+ID integer PRIMARY KEY Identity(1,1),
+RoomID integer,
+GuestID integer,
+RoomRate money,
+StayDate date
 );
 
 CREATE TABLE GuestClasses (
@@ -106,7 +129,7 @@ LastUpdated date
 CREATE TABLE ServiceSales (
 ID integer PRIMARY KEY Identity(1,1),
 TavernID integer,
-Guest varchar(255),
+GuestID integer,
 ServiceID integer,
 TotalSale money,
 SaleDate date
@@ -115,7 +138,7 @@ SaleDate date
 CREATE TABLE SupplySales (
 ID integer PRIMARY KEY Identity(1,1),
 TavernID integer,
-Guest varchar(255),
+GuestID integer,
 SupplyID integer,
 TotalSale money,
 SaleDate date
@@ -425,23 +448,24 @@ VALUES
 	(4, 2, 10, '12/27/2021'),
 	(1,3, 42, '02/05/2022');
 
+--select * from Guests;
 /*ServiceSales values*/
-INSERT INTO ServiceSales(TavernID, Guest, ServiceID, TotalSale, SaleDate)
+INSERT INTO ServiceSales(TavernID, GuestID, ServiceID, TotalSale, SaleDate)
 VALUES
-	(1,'Egilhard', 3, 3.00, '02/05/2022'),
-	(3,'Gerde', 4, 4.00, '02/16/2022'),
-	(7,'Germund', 1, 1.00, '02/20/2022'),
-	(5,'Talea', 5, 6.00, '01/26/2022'),
-	(1,'Arna', 1, 1.00, '12/25/2021');
+	(1, 6, 3, 3.00, '02/05/2022'),
+	(3, 16, 4, 4.00, '02/16/2022'),
+	(7, 7, 1, 1.00, '02/20/2022'),
+	(5, 13, 5, 6.00, '01/26/2022'),
+	(1, 9, 1, 1.00, '12/25/2021');
 
 /*SupplySales values*/
-INSERT INTO SupplySales(TavernID, Guest, SupplyID, TotalSale, SaleDate)
+INSERT INTO SupplySales(TavernID, GuestID, SupplyID, TotalSale, SaleDate)
 VALUES
-	(1,'Egilhard', 3, 3.00, '02/05/2022'),
-	(3,'Gerde', 2, 1.00, '02/16/2022'),
-	(7,'Germund', 1, 1.50, '02/20/2022'),
-	(5,'Talea', 1, 1.50, '01/26/2022'),
-	(1,'Arna', 3, 3.00, '12/25/2021');
+	(1, 11, 3, 3.00, '02/05/2022'),
+	(3, 1, 2, 1.00, '02/16/2022'),
+	(7, 14, 1, 1.50, '02/20/2022'),
+	(5, 17, 1, 1.50, '01/26/2022'),
+	(1, 1, 3, 3.00, '12/25/2021');
 
 /*Orders values*/
 INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
@@ -453,6 +477,62 @@ VALUES
 	(1, 1, 5.00, 3, '01/16/2022'),
 	(7, 3, 15.00, 6, '01/22/2022');
 
+/*Rooms values*/
+INSERT INTO Rooms(TavernID, StatusID, RoomRate)
+VALUES
+	(1, 5, 100),
+	(2, 4, 200),
+	(3, 3, 150),
+	(4, 2, 300),
+	(5, 1, 250),
+	(6, 6, 50),
+	(7, 5, 200),
+	(1, 4, 175),
+	(2, 3, 225),
+	(3, 2, 300),
+	(4, 1, 500),
+	(5, 5, 200),
+	(6, 4, 250),
+	(7, 3, 175),
+	(1, 2, 80),
+	(2, 1, 100),
+	(3, 6, 125),
+	(4, 5, 400),
+	(5, 4, 200),
+	(6, 3, 150),
+	(7, 2, 275);
+
+/*RoomStatus values*/
+INSERT INTO RoomStatus(StatusName)
+VALUES
+	('Occupied'),
+	('Dirty'),
+	('Cleaned'),
+	('Ready'),
+	('Destroyed'),
+	('Infested');
+
+select * from Rooms;
+
+/*RoomStays values*/
+INSERT INTO RoomStays(RoomID, GuestID, RoomRate, StayDate)
+VALUES
+	(2, 1, 200, '1597-02-12'),
+	(5, 7, 250, '1598-03-11'),
+	(17, 16, 125, '1613-03-04'),
+	(7, 21, 200, '1626-09-14'),
+	(1, 6, 100, '1636-02-13'),
+	(16, 19, 100, '1597-02-12'),
+	(3, 9, 150, '1598-03-11'),
+	(8, 21, 175, '1613-03-04'),
+	(14, 19, 175, '1626-09-14'),
+	(20, 19, 150, '1636-02-13'),
+	(2, 14, 200, '1597-02-12'),
+	(21, 1, 275, '1598-03-11'),
+	(16, 14, 100, '1613-03-04'),
+	(6, 1, 50, '1626-09-14'),
+	(4, 13, 300, '1636-02-13'),
+	(15, 11, 80, '1646-02-28');
 
 --Alter tables
 ALTER TABLE GuestClasses ADD FOREIGN KEY (GuestID) REFERENCES Guests(ID);
@@ -467,12 +547,17 @@ ALTER TABLE	TavernSupplies ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
 ALTER TABLE	TavernSupplies ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
 ALTER TABLE	ServiceSales ADD FOREIGN KEY (ServiceID) REFERENCES TavernService(ID);
 ALTER TABLE	ServiceSales ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
+ALTER TABLE	ServiceSales ADD FOREIGN KEY (GuestID) REFERENCES Guests(ID);
 ALTER TABLE	Orders ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
 ALTER TABLE	SupplySales ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
 ALTER TABLE	SupplySales ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
+ALTER TABLE	SupplySales ADD FOREIGN KEY (GuestID) REFERENCES Guests(ID);
+ALTER TABLE Rooms ADD FOREIGN KEY (TavernID) REFERENCES Taverns(ID);
+ALTER TABLE Rooms ADD FOREIGN KEY (StatusID) REFERENCES RoomStatus(ID);
+ALTER TABLE RoomStays ADD FOREIGN KEY (RoomID) REFERENCES Rooms(ID);
+ALTER TABLE RoomStays ADD FOREIGN KEY (GuestID) REFERENCES Guests(ID);
 --Not sure why this last alter table was producing an error.
-ALTER TABLE	Orders ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
-
+--ALTER TABLE	Orders ADD FOREIGN KEY (SupplyID) REFERENCES Supplies(ID);
 
 --Breaking constraints
 /*
@@ -490,3 +575,54 @@ UPDATE Taverns
 SET LocationID = 10
 WHERE LocationID = 2;
 */
+
+
+select * from Guests;
+UPDATE Guests
+SET GuestName = 'Audie'
+WHERE GuestName = 'Dunstan';
+
+UPDATE Guests
+SET Notes = 'Ask for a last name.'
+WHERE GuestName = 'Linn';
+
+--Guests with birthdays before 2000.
+select * from Guests
+where Birthday < '2000-01-01';
+
+--Rooms that cost more than 100 gold per night.
+select * from Rooms
+where RoomRate > 100;
+
+--Unique guest names.
+select distinct GuestName
+from Guests;
+
+--Return all guests ordered by name (ascending)
+select * from Guests
+order by GuestName asc;
+
+--Select top 10 highest price sales.
+select top 10 RoomRate
+from RoomStays;
+
+--Combine lookup tables.
+select * from Locations, RoomStatus, GuestStatus, Classes, Roles;
+
+--Guest Classes with a new column for level grouping.
+select ID, GuestID, ClassID, ClassLevel,
+case
+when ClassLevel >= 5 THEN 'Lvl 5-10'
+when ClassLevel < 5 THEN 'Lvl 0-4'
+else null
+end as LevelGrouping
+from GuestClasses;
+
+--select * from GuestClasses;
+
+--Optional query.
+--WIP
+
+select * from information_schema.columns;
+select * from Taverns;
+
