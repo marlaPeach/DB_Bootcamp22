@@ -334,7 +334,7 @@ VALUES
 	(1, 7, 5),
 	(5, 3, 2),
 	(5, 4, 1),
-	(5, 5, 3),
+	(11, 5, 3),
 	(11, 2, 5),
 	(13, 6, 7);
 
@@ -619,7 +619,7 @@ else null
 end as LevelGrouping
 from GuestClasses;
 
---select * from GuestClasses;
+select * from GuestClasses;
 
 --Optional query.
 --WIP
@@ -628,3 +628,12 @@ from GuestClasses;
 
 --select * from information_schema.columns;
 --select TavernName from Taverns;
+
+
+--Joins
+--Join Guests, Levels, and Classes to get a result containing all guests, their classes, and their levels.
+SELECT Guests.ID as GuestID, Guests.GuestName, Classes.ClassName, GuestClasses.ClassLevel as Level
+FROM Guests
+JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
+JOIN Classes on GuestClasses.ClassID = Classes.ID;
+
