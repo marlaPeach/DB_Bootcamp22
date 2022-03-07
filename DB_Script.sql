@@ -696,24 +696,41 @@ join Guests on SupplySales.GuestID = Guests.ID
 join Supplies on SupplySales.SupplyID = Supplies.ID
 join Taverns on SupplySales.TavernID = Taverns.ID;
 
+select top 10 SupplySales.TotalSale
+from SupplySales;
+
 
 --Return guests with 2 or more classes.
 select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
 from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
 group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
-having count(*) > 1;
+having count(Guests.ID) > 1;
 
 --Return guests with 2 or more classes with levels higher than 5.
 select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
 from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
 where GuestClasses.ClassLevel > 5
 group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
-having count(*) > 1;
+having count(Guests.ID) > 1;
 
 --Return guests with ONLY their highest level class.
-select Guests.*, GuestClasses.*
+--Stuck
+select Guests.ID, Guests.GuestName, GuestClasses.ClassLevel
 from Guests
-join GuestClasses on GuestClasses.GuestID = Guests.ID;
+join GuestClasses on Guests.ID = GuestClasses.GuestID
+(case
+	when Guests.ID in (select Guests.ID 
+		from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+		group by Guests.ID
+		having count(Guests.ID) > 1) then max(GuestClasses.ClassLevel)
+	else GuestClasses.ClassLevel
+end);
+
 
 
 --Return guests that stay within a date range.
+select Guests.ID, Guests.GuestName, RoomStays.RoomID, RoomStays.GuestID, RoomStays.RoomRate, RoomStays.StayDate
+from Guests
+right join RoomStays on Guests.ID = RoomStays.GuestID
+where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
+
