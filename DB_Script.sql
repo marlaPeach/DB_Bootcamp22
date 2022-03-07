@@ -330,13 +330,35 @@ VALUES
 /* GuestClasses values*/
 INSERT INTO GuestClasses (GuestID, ClassID, ClassLevel)
 VALUES
-	(1, 1, 3),
-	(1, 7, 5),
-	(5, 3, 2),
-	(5, 4, 1),
-	(11, 5, 3),
-	(11, 2, 5),
-	(13, 6, 7);
+	(1, 1, 53),
+	(1, 7, 9),
+	(5, 3, 38),
+	(5, 4, 19),
+	(11, 5, 42),
+	(11, 2, 46),
+	(1, 1, 23),
+	(17, 4, 24),
+	(6, 7, 25),
+	(3, 2, 22),
+	(12, 4, 31),
+	(21, 1, 37),
+	(3, 5, 21),
+	(13, 6, 35),
+	(18, 5, 32),
+	(8, 1, 8),
+	(9, 6, 1),
+	(7, 3, 11),
+	(21, 2, 54),
+	(16, 4, 42),
+	(2, 1, 41),
+	(8, 6, 24),
+	(15, 3, 17),
+	(5, 7, 47),
+	(16, 1, 21),
+	(4, 5, 20),
+	(19, 6, 3),
+	(4, 5, 51);
+
 
 /*Guests values.*/
 INSERT INTO Guests (GuestName, Birthday, Cakeday, StatusID)
@@ -421,32 +443,36 @@ VALUES
 /*Supplies values*/
 INSERT INTO Supplies(ItemName, Unit, CostPerUnit, TotalInventory, LastUpdated)
 VALUES
-	('Strong Ale', 'Ounces', 1.50, 240, '7/9/1612'),
+	('Strong Ale', 'Ounces', 1.50, 240, '07/9/1612'),
 	('Brown Bread', 'Loaf', 1.00, 72, '10/20/1620'),
-	('Soup', 'Ounces', 3.00, 587, '4/10/1625');
+	('Soup', 'Ounces', 3.00, 587, '04/10/1625'),
+	('Pipe Tobacco', 'Ounces', 2.50, 240, '02/08/1601'),
+	('Beard Oil', 'Ounces', 1.00, 72, '07/07/1605'),
+	('Hairbands', 'Band', 1.50, 240, '05/06/1608'),
+	('Beef Jerky', 'Ounces', 6.00, 72, '10/11/1609');
 
 /*TavernSupplies values*/
 INSERT INTO TavernSupplies(TavernID, SupplyID, InventoryCount, LastUpdated)
 VALUES
-	(1, 1, 2, '02/04/2022'),
-	(2, 1, 5, '01/10/2022'),
-	(1, 2, 4, '12/27/2021'),
-	(2, 2, 3, '12/14/2021'),
-	(3,3, 5, '02/05/2022'),
-	(4,1, 10, '02/04/2022'),
-	(5,1, 22, '01/10/2022'),
-	(6,2, 16, '12/27/2021'),
-	(7, 2, 24, '12/14/2021'),
-	(2, 3, 10, '02/05/2022'),
-	(3, 1, 47, '02/04/2022'),
-	(7, 1, 12, '01/10/2022'),
-	(6, 2, 16, '12/27/2021'),
-	(5, 2, 22, '12/14/2021'),
-	(4, 3, 9, '02/05/2022'),
-	(7, 1, 7, '02/04/2022'),
-	(2, 1, 22, '01/10/2022'),
-	(4, 2, 10, '12/27/2021'),
-	(1,3, 42, '02/05/2022');
+	(1, 1, 2, '02/04/1599'),
+	(2, 1, 5, '11/02/1604'),
+	(1, 2, 4, '09/08/1601'),
+	(2, 2, 3, '12/02/1608'),
+	(3,3, 5, '07/11/1610'),
+	(4,1, 10, '11/01/1611'),
+	(5,1, 22, '08/07/1611'),
+	(6,2, 16, '10/08/1597'),
+	(7, 2, 24, '11/09/1597'),
+	(2, 3, 10, '11/01/1598'),
+	(3, 1, 47, '10/05/1599'),
+	(7, 1, 12, '11/05/1600'),
+	(6, 2, 16, '03/09/1600'),
+	(5, 2, 22, '03/01/1602'),
+	(4, 3, 9, '03/07/1610'),
+	(7, 1, 7, '07/08/1611'),
+	(2, 1, 22, '02/01/1603'),
+	(4, 2, 10, '01/04/1603'),
+	(1,3, 42, '08/02/1604');
 
 --select * from Guests;
 /*ServiceSales values*/
@@ -461,21 +487,34 @@ VALUES
 /*SupplySales values*/
 INSERT INTO SupplySales(TavernID, GuestID, SupplyID, TotalSale, SaleDate)
 VALUES
-	(1, 11, 3, 3.00, '02/05/2022'),
-	(3, 1, 2, 1.00, '02/16/2022'),
-	(7, 14, 1, 1.50, '02/20/2022'),
-	(5, 17, 1, 1.50, '01/26/2022'),
+	(1, 11, 3, 3.00, '12/02/1599'),
+	(3, 1, 2, 1.00, '08/01/1600'),
+	(7, 14, 1, 1.50, '12/02/1600'),
+	(5, 17, 1, 1.50, '12/06/1601'),
+	(3, 13, 7, 6.00, '11/01/1602'),
+	(1, 1, 6, 1.50, '10/04/1602'),
+	(7, 16, 4, 2.50, '07/08/1602'),
+	(2, 15, 2, 1.00, '02/05/1603'),
+	(3, 16, 5, 1.00, '12/06/1603'),
+	(6, 5, 4, 2.50, '02/06/1604'),
+	(3, 6, 7, 6.00, '03/07/1604'),
+	(2, 9, 2, 1.00, '03/02/1605'),
+	(3, 8, 6, 1.50, '12/11/1606'),
+	(4, 9, 7, 6.00, '12/05/1607'),
+	(3, 21, 4, 2.50, '08/06/1607'),
+	(2, 3, 7, 6.00, '01/08/1607'),
+	(4, 5, 2, 1.00, '12/05/1608'),
 	(1, 1, 3, 3.00, '12/25/2021');
 
 /*Orders values*/
 INSERT INTO Orders(SupplyID, TavernID, TotalPrice, Amount, DateOfSale)
 VALUES
-	(1, 1, 10.00, 2, '12/25/2021'),
-	(3, 2, 8.00, 4, '12/14/2021'),
-	(5, 1, 10.00, 2, '12/01/2021'),
-	(6, 3, 15.00, 6, '12/28/2021'),
-	(1, 1, 5.00, 3, '01/16/2022'),
-	(7, 3, 15.00, 6, '01/22/2022');
+	(1, 1, 10.00, 2, '06/07/1610'),
+	(3, 2, 8.00, 4, '12/06/1611'),
+	(5, 1, 10.00, 2, '12/06/1611'),
+	(6, 3, 15.00, 6, '10/04/1602'),
+	(1, 1, 5.00, 3, '12/06/1603'),
+	(7, 3, 15.00, 6, '08/06/1607');
 
 /*Rooms values*/
 INSERT INTO Rooms(TavernID, StatusID, RoomRate)
@@ -512,27 +551,25 @@ VALUES
 	('Destroyed'),
 	('Infested');
 
-select * from Rooms;
-
 /*RoomStays values*/
 INSERT INTO RoomStays(RoomID, GuestID, RoomRate, StayDate)
 VALUES
-	(2, 1, 200, '1597-02-12'),
-	(5, 7, 250, '1598-03-11'),
-	(17, 16, 125, '1613-03-04'),
-	(7, 21, 200, '1626-09-14'),
-	(1, 6, 100, '1636-02-13'),
-	(16, 19, 100, '1597-02-12'),
-	(3, 9, 150, '1598-03-11'),
-	(8, 21, 175, '1613-03-04'),
-	(14, 19, 175, '1626-09-14'),
-	(20, 19, 150, '1636-02-13'),
-	(2, 14, 200, '1597-02-12'),
-	(21, 1, 275, '1598-03-11'),
-	(16, 14, 100, '1613-03-04'),
-	(6, 1, 50, '1626-09-14'),
-	(4, 13, 300, '1636-02-13'),
-	(15, 11, 80, '1646-02-28');
+	(2, 1, 200, '12/02/1597'),
+	(5, 7, 250, '11/03/1598'),
+	(17, 16, 125, '04/03/1613'),
+	(7, 21, 200, '12/09/1626'),
+	(1, 6, 100, '12/02/1636'),
+	(16, 19, 100, '12/02/1597'),
+	(3, 9, 150, '11/03/1598'),
+	(8, 21, 175, '04/03/1613'),
+	(14, 19, 175, '12/09/1626'),
+	(20, 19, 150, '12/02/1636'),
+	(2, 14, 200, '12/02/1597'),
+	(21, 1, 275, '11/03/1598'),
+	(16, 14, 100, '04/03/1613'),
+	(6, 1, 50, '12/09/1626'),
+	(4, 13, 300, '12/02/1636'),
+	(15, 11, 80, '02/02/1646');
 
 --Alter tables
 ALTER TABLE GuestClasses ADD FOREIGN KEY (GuestID) REFERENCES Guests(ID);
@@ -575,16 +612,6 @@ UPDATE Taverns
 SET LocationID = 10
 WHERE LocationID = 2;
 */
-
-
-SELECT * FROM Guests;
-UPDATE Guests
-SET GuestName = 'Audie'
-WHERE GuestName = 'Dunstan';
-
-UPDATE Guests
-SET Notes = 'Ask for a last name.'
-WHERE GuestName = 'Linn';
 
 --Guests with birthdays before 2000.
 SELECT * FROM Guests
@@ -637,3 +664,56 @@ FROM Guests
 JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
 JOIN Classes on GuestClasses.ClassID = Classes.ID;
 
+
+
+--Return users who have admin roles.
+select * from Roles;
+select * from Employees;
+select * from Taverns;
+select * from Employees where RoleID = 1;
+
+--Return users who have admin roles and information about their taverns.
+select Employees.ID as EmployeeID, Employees.EmployeeName, Employees.TavernID as EmployeeTavernID, Employees.RoleID as EmployeeRoleID, Roles.RoleName as EmployeeRole, Taverns.ID as TavernID, Taverns.TavernName, Taverns.FloorCount as TavernFloors, Taverns.OwnerID, Taverns.LocationID
+from Employees
+join Taverns on Employees.TavernID = Taverns.ID
+join Roles on Employees.RoleID = Roles.ID
+where RoleID = 1;
+
+--Return all guests ordered by name (asc) and their classes and corresponding levels.
+select Guests.ID as GuestID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.StatusID, GuestStatus.StatusName, Guests.Notes,  GuestClasses.ClassID as GuestClassID, Classes.ClassName, GuestClasses.ClassLevel
+from Guests 
+join GuestClasses on GuestClasses.GuestID = Guests.ID
+join Classes on GuestClasses.ClassID = Classes.ID
+join GuestStatus on Guests.StatusID = GuestStatus.ID
+order by Guests.GuestName asc;
+
+--Return the top 10 sales in terms of sales price and what the services were.
+select * from SupplySales;
+--Wait, is this really the top ten sales?
+select top 10 SupplySales.TotalSale, SupplySales.ID as SaleID, SupplySales.TavernID, Taverns.TavernName, SupplySales.GuestID, Guests.GuestName, SupplySales.SupplyID, Supplies.ItemName, SupplySales.SaleDate
+from SupplySales
+join Guests on SupplySales.GuestID = Guests.ID
+join Supplies on SupplySales.SupplyID = Supplies.ID
+join Taverns on SupplySales.TavernID = Taverns.ID;
+
+
+--Return guests with 2 or more classes.
+select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+having count(*) > 1;
+
+--Return guests with 2 or more classes with levels higher than 5.
+select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+where GuestClasses.ClassLevel > 5
+group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+having count(*) > 1;
+
+--Return guests with ONLY their highest level class.
+select Guests.*, GuestClasses.*
+from Guests
+join GuestClasses on GuestClasses.GuestID = Guests.ID;
+
+
+--Return guests that stay within a date range.
