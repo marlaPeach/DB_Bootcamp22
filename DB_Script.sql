@@ -717,7 +717,7 @@ having count(Guests.ID) > 1;
 --Stuck
 select Guests.ID, Guests.GuestName, GuestClasses.ClassLevel
 from Guests
-join GuestClasses on Guests.ID = GuestClasses.GuestID
+join GuestClasses on GuestClasses.GuestID = Guests.ID
 (case
 	when Guests.ID in (select Guests.ID 
 		from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
@@ -734,3 +734,16 @@ from Guests
 right join RoomStays on Guests.ID = RoomStays.GuestID
 where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
 
+--Create a function for pricing.
+IF OBJECT_ID (N'Supplies.calculatePricing', N'IF') IS NOT NULL
+    DROP FUNCTION Supplies.calculatePricing;
+GO
+CREATE FUNCTION Supplies.calculatePricing (@supplyID int)  
+RETURNS TABLE
+AS
+RETURN
+(
+	SELECT s.ID, s.ItemName, s.CostPerUnit, (s.CostPerUnit * 3) as CostForThree
+    FROM Supplies AS s
+    GROUP BY s.ID
+);
