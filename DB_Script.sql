@@ -613,137 +613,161 @@ SET LocationID = 10
 WHERE LocationID = 2;
 */
 
---Guests with birthdays before 2000.
-SELECT * FROM Guests
-WHERE Birthday < '2000-01-01';
+----Guests with birthdays before 2000.
+--SELECT * FROM Guests
+--WHERE Birthday < '2000-01-01';
 
---Rooms that cost more than 100 gold per night.
-SELECT * FROM Rooms
-WHERE RoomRate > 100;
+----Rooms that cost more than 100 gold per night.
+--SELECT * FROM Rooms
+--WHERE RoomRate > 100;
 
---Unique guest names.
-SELECT DISTINCT GuestName
-FROM Guests;
+----Unique guest names.
+--SELECT DISTINCT GuestName
+--FROM Guests;
 
---Return all guests ordered by name (ascending)
-SELECT * FROM Guests
-ORDER BY GuestName ASC;
+----Return all guests ordered by name (ascending)
+--SELECT * FROM Guests
+--ORDER BY GuestName ASC;
 
---Select top 10 highest price sales.
-SELECT TOP 10 RoomRate
-FROM RoomStays;
+----Select top 10 highest price sales.
+--SELECT TOP 10 RoomRate
+--FROM RoomStays;
 
---Combine lookup tables.
-SELECT * FROM Locations, RoomStatus, GuestStatus, Classes, Roles;
-
-
---Guest Classes with a new column for level grouping.
-select ID, GuestID, ClassID, ClassLevel,
-case
-when ClassLevel >= 5 THEN 'Lvl 5-10'
-when ClassLevel < 5 THEN 'Lvl 0-4'
-else null
-end as LevelGrouping
-from GuestClasses;
-
-select * from GuestClasses;
-
---Optional query.
---WIP
---select TABLE_NAME from information_schema.columns
---select Concat('CREATE TABLE ''',TABLE_NAME, '''') from information_schema.columns;
-
---select * from information_schema.columns;
---select TavernName from Taverns;
+----Combine lookup tables.
+--SELECT * FROM Locations, RoomStatus, GuestStatus, Classes, Roles;
 
 
---Joins
---Join Guests, Levels, and Classes to get a result containing all guests, their classes, and their levels.
-SELECT Guests.ID as GuestID, Guests.GuestName, Classes.ClassName, GuestClasses.ClassLevel as Level
-FROM Guests
-JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
-JOIN Classes on GuestClasses.ClassID = Classes.ID;
+----Guest Classes with a new column for level grouping.
+--select ID, GuestID, ClassID, ClassLevel,
+--case
+--when ClassLevel >= 5 THEN 'Lvl 5-10'
+--when ClassLevel < 5 THEN 'Lvl 0-4'
+--else null
+--end as LevelGrouping
+--from GuestClasses;
+
+--select * from GuestClasses;
+
+----Optional query.
+----WIP
+----select TABLE_NAME from information_schema.columns
+----select Concat('CREATE TABLE ''',TABLE_NAME, '''') from information_schema.columns;
+
+----select * from information_schema.columns;
+----select TavernName from Taverns;
 
 
-
---Return users who have admin roles.
-select * from Roles;
-select * from Employees;
-select * from Taverns;
-select * from Employees where RoleID = 1;
-
---Return users who have admin roles and information about their taverns.
-select Employees.ID as EmployeeID, Employees.EmployeeName, Employees.TavernID as EmployeeTavernID, Employees.RoleID as EmployeeRoleID, Roles.RoleName as EmployeeRole, Taverns.ID as TavernID, Taverns.TavernName, Taverns.FloorCount as TavernFloors, Taverns.OwnerID, Taverns.LocationID
-from Employees
-join Taverns on Employees.TavernID = Taverns.ID
-join Roles on Employees.RoleID = Roles.ID
-where RoleID = 1;
-
---Return all guests ordered by name (asc) and their classes and corresponding levels.
-select Guests.ID as GuestID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.StatusID, GuestStatus.StatusName, Guests.Notes,  GuestClasses.ClassID as GuestClassID, Classes.ClassName, GuestClasses.ClassLevel
-from Guests 
-join GuestClasses on GuestClasses.GuestID = Guests.ID
-join Classes on GuestClasses.ClassID = Classes.ID
-join GuestStatus on Guests.StatusID = GuestStatus.ID
-order by Guests.GuestName asc;
-
---Return the top 10 sales in terms of sales price and what the services were.
-select * from SupplySales;
---Wait, is this really the top ten sales?
-select top 10 SupplySales.TotalSale, SupplySales.ID as SaleID, SupplySales.TavernID, Taverns.TavernName, SupplySales.GuestID, Guests.GuestName, SupplySales.SupplyID, Supplies.ItemName, SupplySales.SaleDate
-from SupplySales
-join Guests on SupplySales.GuestID = Guests.ID
-join Supplies on SupplySales.SupplyID = Supplies.ID
-join Taverns on SupplySales.TavernID = Taverns.ID;
-
-select top 10 SupplySales.TotalSale
-from SupplySales;
-
-
---Return guests with 2 or more classes.
-select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
-from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
-group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
-having count(Guests.ID) > 1;
-
---Return guests with 2 or more classes with levels higher than 5.
-select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
-from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
-where GuestClasses.ClassLevel > 5
-group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
-having count(Guests.ID) > 1;
-
---Return guests with ONLY their highest level class.
---Stuck
-select Guests.ID, Guests.GuestName, GuestClasses.ClassLevel
-from Guests
-join GuestClasses on GuestClasses.GuestID = Guests.ID
-(case
-	when Guests.ID in (select Guests.ID 
-		from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
-		group by Guests.ID
-		having count(Guests.ID) > 1) then max(GuestClasses.ClassLevel)
-	else GuestClasses.ClassLevel
-end);
+----Joins
+----Join Guests, Levels, and Classes to get a result containing all guests, their classes, and their levels.
+--SELECT Guests.ID as GuestID, Guests.GuestName, Classes.ClassName, GuestClasses.ClassLevel as Level
+--FROM Guests
+--JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
+--JOIN Classes on GuestClasses.ClassID = Classes.ID;
 
 
 
---Return guests that stay within a date range.
-select Guests.ID, Guests.GuestName, RoomStays.RoomID, RoomStays.GuestID, RoomStays.RoomRate, RoomStays.StayDate
-from Guests
-right join RoomStays on Guests.ID = RoomStays.GuestID
-where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
+----Return users who have admin roles.
+--select * from Roles;
+--select * from Employees;
+--select * from Taverns;
+--select * from Employees where RoleID = 1;
 
---Create a function for pricing.
-IF OBJECT_ID (N'Supplies.calculatePricing', N'IF') IS NOT NULL
-    DROP FUNCTION Supplies.calculatePricing;
-GO
-CREATE FUNCTION Supplies.calculatePricing (@supplyID int)  
-RETURNS TABLE
-AS
-RETURN
-(
-	SELECT s.ID, s.ItemName, s.CostPerUnit, (s.CostPerUnit * 3) as CostForThree
-    FROM Supplies AS s
-    GROUP BY s.ID
-);
+----Return users who have admin roles and information about their taverns.
+--select Employees.ID as EmployeeID, Employees.EmployeeName, Employees.TavernID as EmployeeTavernID, Employees.RoleID as EmployeeRoleID, Roles.RoleName as EmployeeRole, Taverns.ID as TavernID, Taverns.TavernName, Taverns.FloorCount as TavernFloors, Taverns.OwnerID, Taverns.LocationID
+--from Employees
+--join Taverns on Employees.TavernID = Taverns.ID
+--join Roles on Employees.RoleID = Roles.ID
+--where RoleID = 1;
+
+----Return all guests ordered by name (asc) and their classes and corresponding levels.
+--select Guests.ID as GuestID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.StatusID, GuestStatus.StatusName, Guests.Notes,  GuestClasses.ClassID as GuestClassID, Classes.ClassName, GuestClasses.ClassLevel
+--from Guests 
+--join GuestClasses on GuestClasses.GuestID = Guests.ID
+--join Classes on GuestClasses.ClassID = Classes.ID
+--join GuestStatus on Guests.StatusID = GuestStatus.ID
+--order by Guests.GuestName asc;
+
+----Return the top 10 sales in terms of sales price and what the services were.
+--select * from SupplySales;
+----Wait, is this really the top ten sales?
+--select top 10 SupplySales.TotalSale, SupplySales.ID as SaleID, SupplySales.TavernID, Taverns.TavernName, SupplySales.GuestID, Guests.GuestName, SupplySales.SupplyID, Supplies.ItemName, SupplySales.SaleDate
+--from SupplySales
+--join Guests on SupplySales.GuestID = Guests.ID
+--join Supplies on SupplySales.SupplyID = Supplies.ID
+--join Taverns on SupplySales.TavernID = Taverns.ID;
+
+--select top 10 SupplySales.TotalSale
+--from SupplySales;
+
+
+----Return guests with 2 or more classes.
+--select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+--from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+--group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+--having count(Guests.ID) > 1;
+
+----Return guests with 2 or more classes with levels higher than 5.
+--select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+--from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+--where GuestClasses.ClassLevel > 5
+--group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+--having count(Guests.ID) > 1;
+
+----Return guests with ONLY their highest level class.
+----Stuck
+----select g.GuestName, c.ClassName, MaxLevel.MaxLevel
+----from Guests as g
+----join GuestClasses as gc on gc.GuestID = g.ID
+----join
+----	(select top 1 gc2.GuestID, MAX(gc2.ClassLevel)as MaxLevel, gc2.ClassID
+----	from GuestClasses as gc2
+----	group by gc2.GuestID, gc2.ClassID) as MaxLevel on g.ID = MaxLevel.GuestID
+----join Classes as c on c.ID = MaxLevel.ClassID
+----group by g.GuestName, c.ClassName, MaxLevel.MaxLevel;
+
+--select g.GuestName, max(gc.ClassLevel) as MaxLevel
+--from Guests as g
+--join GuestClasses as gc on g.ID = gc.GuestID
+--join Classes as c on c.ID = gc.ClassID
+--()
+--group by g.ID, g.GuestName;
+
+
+
+----Return guests that stay within a date range.
+--select Guests.ID, Guests.GuestName, RoomStays.RoomID, RoomStays.GuestID, RoomStays.RoomRate, RoomStays.StayDate
+--from Guests
+--right join RoomStays on Guests.ID = RoomStays.GuestID
+--where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
+
+----Create a function for pricing.
+--/*
+--IF OBJECT_ID (N'Supplies.calculatePricing', N'IF') IS NOT NULL
+--    DROP FUNCTION Supplies.calculatePricing;
+--GO
+--CREATE FUNCTION Supplies.calculatePricing (@supplyID int)  
+--RETURNS TABLE
+--AS
+--RETURN
+--(
+--	SELECT s.ID, s.ItemName, s.CostPerUnit, (s.CostPerUnit * 3) as CostForThree
+--    FROM Supplies AS s
+--    GROUP BY s.ID
+--);*/
+
+----Write a function to return a "report" of all users and their roles.
+--/*
+--IF OBJECT_ID (N'dbo.runGuestReport', N'FN') IS NOT NULL
+--    DROP FUNCTION runGuestReport;
+--GO
+--CREATE FUNCTION dbo.runGuestReport()
+--RETURNS TABLE
+--AS
+--RETURN
+--    SELECT
+--		Guests.ID,
+--		Guests.GuestName,
+--		Guests.
+--	FROM
+		
+--END;*/
