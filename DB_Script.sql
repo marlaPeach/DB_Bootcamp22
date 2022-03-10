@@ -614,104 +614,104 @@ WHERE LocationID = 2;
 */
 
 ----Guests with birthdays before 2000.
---SELECT * FROM Guests
---WHERE Birthday < '2000-01-01';
+SELECT * FROM Guests
+WHERE Birthday < '2000-01-01';
 
 ----Rooms that cost more than 100 gold per night.
---SELECT * FROM Rooms
---WHERE RoomRate > 100;
+SELECT * FROM Rooms
+WHERE RoomRate > 100;
 
 ----Unique guest names.
---SELECT DISTINCT GuestName
---FROM Guests;
+SELECT DISTINCT GuestName
+FROM Guests;
 
 ----Return all guests ordered by name (ascending)
---SELECT * FROM Guests
---ORDER BY GuestName ASC;
+SELECT * FROM Guests
+ORDER BY GuestName ASC;
 
 ----Select top 10 highest price sales.
---SELECT TOP 10 RoomRate
---FROM RoomStays;
+SELECT TOP 10 RoomRate
+FROM RoomStays;
 
 ----Combine lookup tables.
---SELECT * FROM Locations, RoomStatus, GuestStatus, Classes, Roles;
+SELECT * FROM Locations, RoomStatus, GuestStatus, Classes, Roles;
 
 
 ----Guest Classes with a new column for level grouping.
---select ID, GuestID, ClassID, ClassLevel,
---case
---when ClassLevel >= 5 THEN 'Lvl 5-10'
---when ClassLevel < 5 THEN 'Lvl 0-4'
---else null
---end as LevelGrouping
---from GuestClasses;
+select ID, GuestID, ClassID, ClassLevel,
+case
+when ClassLevel >= 5 THEN 'Lvl 5-10'
+when ClassLevel < 5 THEN 'Lvl 0-4'
+else null
+end as LevelGrouping
+from GuestClasses;
 
 --select * from GuestClasses;
 
-----Optional query.
-----WIP
-----select TABLE_NAME from information_schema.columns
-----select Concat('CREATE TABLE ''',TABLE_NAME, '''') from information_schema.columns;
+--Optional query.
+--WIP
+--select TABLE_NAME from information_schema.columns
+--select Concat('CREATE TABLE ''',TABLE_NAME, '''') from information_schema.columns;
 
-----select * from information_schema.columns;
-----select TavernName from Taverns;
+--select * from information_schema.columns;
+--select TavernName from Taverns;
 
 
 ----Joins
 ----Join Guests, Levels, and Classes to get a result containing all guests, their classes, and their levels.
---SELECT Guests.ID as GuestID, Guests.GuestName, Classes.ClassName, GuestClasses.ClassLevel as Level
---FROM Guests
---JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
---JOIN Classes on GuestClasses.ClassID = Classes.ID;
+SELECT Guests.ID as GuestID, Guests.GuestName, Classes.ClassName, GuestClasses.ClassLevel as Level
+FROM Guests
+JOIN GuestClasses on Guests.ID = GuestClasses.GuestID
+JOIN Classes on GuestClasses.ClassID = Classes.ID;
 
 
 
-----Return users who have admin roles.
+--Return users who have admin roles.
 --select * from Roles;
 --select * from Employees;
 --select * from Taverns;
---select * from Employees where RoleID = 1;
+select * from Employees where RoleID = 1;
 
 ----Return users who have admin roles and information about their taverns.
---select Employees.ID as EmployeeID, Employees.EmployeeName, Employees.TavernID as EmployeeTavernID, Employees.RoleID as EmployeeRoleID, Roles.RoleName as EmployeeRole, Taverns.ID as TavernID, Taverns.TavernName, Taverns.FloorCount as TavernFloors, Taverns.OwnerID, Taverns.LocationID
---from Employees
---join Taverns on Employees.TavernID = Taverns.ID
---join Roles on Employees.RoleID = Roles.ID
---where RoleID = 1;
+select Employees.ID as EmployeeID, Employees.EmployeeName, Employees.TavernID as EmployeeTavernID, Employees.RoleID as EmployeeRoleID, Roles.RoleName as EmployeeRole, Taverns.ID as TavernID, Taverns.TavernName, Taverns.FloorCount as TavernFloors, Taverns.OwnerID, Taverns.LocationID
+from Employees
+join Taverns on Employees.TavernID = Taverns.ID
+join Roles on Employees.RoleID = Roles.ID
+where RoleID = 1;
 
 ----Return all guests ordered by name (asc) and their classes and corresponding levels.
---select Guests.ID as GuestID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.StatusID, GuestStatus.StatusName, Guests.Notes,  GuestClasses.ClassID as GuestClassID, Classes.ClassName, GuestClasses.ClassLevel
---from Guests 
---join GuestClasses on GuestClasses.GuestID = Guests.ID
---join Classes on GuestClasses.ClassID = Classes.ID
---join GuestStatus on Guests.StatusID = GuestStatus.ID
---order by Guests.GuestName asc;
+select Guests.ID as GuestID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.StatusID, GuestStatus.StatusName, Guests.Notes,  GuestClasses.ClassID as GuestClassID, Classes.ClassName, GuestClasses.ClassLevel
+from Guests 
+join GuestClasses on GuestClasses.GuestID = Guests.ID
+join Classes on GuestClasses.ClassID = Classes.ID
+join GuestStatus on Guests.StatusID = GuestStatus.ID
+order by Guests.GuestName asc;
 
-----Return the top 10 sales in terms of sales price and what the services were.
---select * from SupplySales;
-----Wait, is this really the top ten sales?
---select top 10 SupplySales.TotalSale, SupplySales.ID as SaleID, SupplySales.TavernID, Taverns.TavernName, SupplySales.GuestID, Guests.GuestName, SupplySales.SupplyID, Supplies.ItemName, SupplySales.SaleDate
---from SupplySales
---join Guests on SupplySales.GuestID = Guests.ID
---join Supplies on SupplySales.SupplyID = Supplies.ID
---join Taverns on SupplySales.TavernID = Taverns.ID;
+--Return the top 10 sales in terms of sales price and what the services were.
+select * from SupplySales;
+--Wait, is this really the top ten sales?
+select top 10 SupplySales.TotalSale, SupplySales.ID as SaleID, SupplySales.TavernID, Taverns.TavernName, SupplySales.GuestID, Guests.GuestName, SupplySales.SupplyID, Supplies.ItemName, SupplySales.SaleDate
+from SupplySales
+join Guests on SupplySales.GuestID = Guests.ID
+join Supplies on SupplySales.SupplyID = Supplies.ID
+join Taverns on SupplySales.TavernID = Taverns.ID;
 
---select top 10 SupplySales.TotalSale
---from SupplySales;
+select top 10 SupplySales.TotalSale
+from SupplySales;
 
 
 ----Return guests with 2 or more classes.
---select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
---from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
---group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
---having count(Guests.ID) > 1;
+select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID 
+having count(Guests.ID) > 1;
 
 ----Return guests with 2 or more classes with levels higher than 5.
---select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
---from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
---where GuestClasses.ClassLevel > 5
---group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
---having count(Guests.ID) > 1;
+select Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+from Guests inner join GuestClasses on Guests.ID = GuestClasses.GuestID 
+where GuestClasses.ClassLevel > 5
+group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.Notes, Guests.StatusID
+having count(Guests.ID) > 1;
 
 ----Return guests with ONLY their highest level class.
 ----Stuck
@@ -761,10 +761,10 @@ Group By g.GuestName, c.ClassName;
 
 
 ----Return guests that stay within a date range.
---select Guests.ID, Guests.GuestName, RoomStays.RoomID, RoomStays.GuestID, RoomStays.RoomRate, RoomStays.StayDate
---from Guests
---right join RoomStays on Guests.ID = RoomStays.GuestID
---where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
+select Guests.ID, Guests.GuestName, RoomStays.RoomID, RoomStays.GuestID, RoomStays.RoomRate, RoomStays.StayDate
+from Guests
+right join RoomStays on Guests.ID = RoomStays.GuestID
+where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
 
 ----Create a function for pricing.
 --/*
@@ -786,7 +786,7 @@ Group By g.GuestName, c.ClassName;
 *The function runs fine, but it looks like an error in SQL Server window.
 */
 IF OBJECT_ID (N'dbo.runGuestReport', N'FN') IS NOT NULL
-    DROP FUNCTION runGuestReport;
+    DROP FUNCTION dbo.runGuestReport;
 GO
 CREATE FUNCTION dbo.runGuestReport()
 RETURNS TABLE
@@ -804,8 +804,9 @@ RETURN
 select * from dbo.runGuestReport();
 
 --Function to return all classes and the count of guests that hold those classes.
+--Almost working, counts aren't right. Leaving out 3 Classes.
 IF OBJECT_ID (N'dbo.runClassesReport', N'FN') IS NOT NULL
-    DROP FUNCTION runClassesReport;
+    DROP FUNCTION dbo.runClassesReport;
 GO
 CREATE FUNCTION dbo.runClassesReport()
 RETURNS TABLE
@@ -814,10 +815,141 @@ RETURN
     SELECT
 		c.ID,
 		c.ClassName,
-		count()
+		ClassCount.Counts
 	FROM
 		Classes c
-	GROUP BY c.ID, c.ClassName;
+	join GuestClasses gc on gc.ClassID = c.ID
+	join
+		(select 
+			count(c2.ClassName)as Counts 
+		from Classes c2 
+		join GuestClasses gc2 on c2.ID = gc2.ClassID 
+		group by c2.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
+	GROUP BY c.ID, c.ClassName, ClassCount.Counts;
 
+select * from dbo.runClassesReport();
 
-select * from GuestClasses;
+/*
+select g.GuestName, c.ClassName
+from Guests g
+join GuestClasses gc on gc.GuestID = g.ID
+join Classes c on c.ID = gc.ClassID group by c.ClassName, g.GuestName;*/
+
+--Function to return all guests, ordered by name (asc) and their classes and corresponding levels. Add a column that labels them beginner (1-5), intermediate (5-10), expert (10+)
+--Select works, function creation does not.
+IF OBJECT_ID (N'dbo.runGuestExperienceReport', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.runGuestExperienceReport;
+GO
+CREATE FUNCTION dbo.runGuestExperienceReport()
+RETURNS TABLE
+AS
+RETURN
+    SELECT
+		g.GuestName,
+		c.ClassName,
+		gc.ClassLevel,
+		(case
+			when gc.ClassLevel >=0 AND gc.ClassLevel <=10 then 'Beginner'
+			when gc.ClassLevel >10 AND gc.ClassLevel<=20 then 'Intermediate'
+			when gc.ClassLevel >20 then 'Expert'
+			else null
+		end) as Experience
+	FROM
+		Guests g
+	join GuestClasses gc on gc.ClassID = g.ID
+	join Classes c on gc.ClassID = c.ID
+	order by g.GuestName asc;
+
+--Function that takes in a level and returns a "grouping" from Q3.
+--Where to put the where clause?
+IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.runLevelReport;
+GO
+CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
+RETURNS TABLE
+AS
+RETURN
+    SELECT
+		g.GuestName,
+		c.ClassName,
+		gc.ClassLevel,
+		(case
+			when gc.ClassLevel >=0 AND gc.ClassLevel <=10 then 'Beginner'
+			when gc.ClassLevel >10 AND gc.ClassLevel<=20 then 'Intermediate'
+			when gc.ClassLevel >20 then 'Expert'
+			else null
+		end) as ExperienceLevel
+	FROM
+		Guests g
+	join GuestClasses gc on gc.ClassID = g.ID
+	join Classes c on gc.ClassID = c.ID
+	where ExperienceLevel = @guestExperience
+	order by g.GuestName asc;
+
+IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.runLevelReport;
+GO
+CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
+RETURNS TABLE
+AS
+RETURN
+    (SELECT
+		*
+	from dbo.runGuestExperienceReport());
+
+--Function to return a report of all open rooms on a particular day.
+--Running with duplicates?
+IF OBJECT_ID (N'dbo.runRoomReport', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.runRoomReport;
+GO
+CREATE FUNCTION dbo.runRoomReport(@stayDay date)
+RETURNS TABLE
+AS
+RETURN
+    select 
+		r.ID as RoomID,
+		t.TavernName,
+		s.StatusName
+	from Rooms r
+	join Taverns t on r.TavernID = t.ID
+	join RoomStatus s on r.StatusID = s.ID
+	join RoomStays rs on rs.RoomID = r.ID
+	where s.ID = 4 AND rs.StayDate = @stayDay;
+
+select * from dbo.runRoomReport('1597-12-02');
+
+select * from RoomStays;
+select * from Rooms where Rooms.ID = 2 AND Rooms.StatusID = 4;
+
+--Function to return a report of prices in a range.
+IF OBJECT_ID (N'dbo.runPriceReport', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.runPriceReport;
+GO
+CREATE FUNCTION dbo.runPriceReport(@lowPrice money, @highPrice money)
+RETURNS TABLE
+AS
+RETURN
+    select 
+		r.ID as RoomID,
+		t.TavernName,
+		s.StatusName,
+		r.RoomRate
+	from Rooms r
+	join Taverns t on r.TavernID = t.ID
+	join RoomStatus s on r.StatusID = s.ID
+	join RoomStays rs on rs.RoomID = r.ID
+	where r.RoomRate >= @lowPrice AND r.RoomRate <= @highPrice;
+
+select * from dbo.runPriceReport(100.00, 200.00);
+
+--Stored Procedure that uses the result form 6 to Create a Room in another tavern that undercuts (is less than) the cheapest room by a penny.
+CREATE PROCEDURE undercutTheCompetition
+@lowPrice money, @highPrice money
+AS
+	select
+		min(Result.RoomRate)
+	from
+	(select * from dbo.runPriceReport(100.00, 200.00)) as Result
+GO;
+
+EXEC undercutTheCompetition;
