@@ -715,23 +715,49 @@ WHERE LocationID = 2;
 
 ----Return guests with ONLY their highest level class.
 ----Stuck
-----select g.GuestName, c.ClassName, MaxLevel.MaxLevel
-----from Guests as g
-----join GuestClasses as gc on gc.GuestID = g.ID
-----join
-----	(select top 1 gc2.GuestID, MAX(gc2.ClassLevel)as MaxLevel, gc2.ClassID
-----	from GuestClasses as gc2
-----	group by gc2.GuestID, gc2.ClassID) as MaxLevel on g.ID = MaxLevel.GuestID
-----join Classes as c on c.ID = MaxLevel.ClassID
-----group by g.GuestName, c.ClassName, MaxLevel.MaxLevel;
+select g.GuestName, c.ClassName, MaxLevel.MaxLevel
+from Guests as g
+join GuestClasses as gc on gc.GuestID = g.ID
+join
+	(select gc2.GuestID, MAX(gc2.ClassLevel)as MaxLevel, gc2.ClassID
+	from GuestClasses as gc2
+	group by gc2.GuestID, gc2.ClassID) as MaxLevel on g.ID = MaxLevel.GuestID
+join Classes as c on c.ID = MaxLevel.ClassID
+group by g.GuestName, c.ClassName, MaxLevel.MaxLevel;
 
---select g.GuestName, max(gc.ClassLevel) as MaxLevel
---from Guests as g
---join GuestClasses as gc on g.ID = gc.GuestID
---join Classes as c on c.ID = gc.ClassID
---()
---group by g.ID, g.GuestName;
+select g.GuestName, c.ClassName, max(gc.ClassLevel) as MaxLevel
+from Guests as g
+join GuestClasses as gc on g.ID = gc.GuestID
+join Classes as c on c.ID = gc.ClassID
+group by g.ID, g.GuestName, c.ClassName;
 
+select g.GuestName, gc.ClassLevel, c.ClassName from Guests g
+join GuestClasses gc on g.ID = gc.GuestID
+join Classes c on c.ID = gc.ClassID
+order by g.GuestName;
+
+--Shaun => I removed the nulls with a where clause on this one, but the next one will have a case statement.
+SELECT g.GuestName AS 'Guest Name', c.ClassName
+FROM Guests g
+LEFT JOIN Classes c on c.ID = 
+        (select TOP 1 gc2.ClassID
+         from GuestClasses gc2
+         where gc2.GuestID = g.Id
+         order by gc2.ClassLevel desc
+        )
+where ClassName is NOT NULL
+Group By g.GuestName, c.ClassName;
+
+--With a case.
+SELECT g.GuestName AS 'Guest Name', c.ClassName
+FROM Guests g
+LEFT JOIN Classes c on c.ID = 
+        (select TOP 1 gc2.ClassID
+         from GuestClasses gc2
+         where gc2.GuestID = g.Id
+         order by gc2.ClassLevel desc
+        )
+Group By g.GuestName, c.ClassName;
 
 
 ----Return guests that stay within a date range.
@@ -755,19 +781,43 @@ WHERE LocationID = 2;
 --    GROUP BY s.ID
 --);*/
 
-----Write a function to return a "report" of all users and their roles.
---/*
---IF OBJECT_ID (N'dbo.runGuestReport', N'FN') IS NOT NULL
---    DROP FUNCTION runGuestReport;
---GO
---CREATE FUNCTION dbo.runGuestReport()
---RETURNS TABLE
---AS
---RETURN
---    SELECT
---		Guests.ID,
---		Guests.GuestName,
---		Guests.
---	FROM
-		
---END;*/
+/*Write a function to return a "report" of all users and their roles.
+*Weird error on line 792: CREATE FUNCTION MUST BE THE ONLY STATEMENT IN THE BATCH
+*The function runs fine, but it looks like an error in SQL Server window.
+*/
+IF OBJECT_ID (N'dbo.runGuestReport', N'FN') IS NOT NULL
+    DROP FUNCTION runGuestReport;
+GO
+CREATE FUNCTION dbo.runGuestReport()
+RETURNS TABLE
+AS
+RETURN
+    SELECT
+		e.ID,
+		e.EmployeeName,
+		r.roleName
+	FROM
+		Employees e
+	JOIN Roles r on r.ID = e.RoleID;
+
+--To run:
+select * from dbo.runGuestReport();
+
+--Function to return all classes and the count of guests that hold those classes.
+IF OBJECT_ID (N'dbo.runClassesReport', N'FN') IS NOT NULL
+    DROP FUNCTION runClassesReport;
+GO
+CREATE FUNCTION dbo.runClassesReport()
+RETURNS TABLE
+AS
+RETURN
+    SELECT
+		c.ID,
+		c.ClassName,
+		count()
+	FROM
+		Classes c
+	GROUP BY c.ID, c.ClassName;
+
+
+select * from GuestClasses;
