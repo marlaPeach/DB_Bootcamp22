@@ -736,7 +736,7 @@ join GuestClasses gc on g.ID = gc.GuestID
 join Classes c on c.ID = gc.ClassID
 order by g.GuestName;
 
---Shaun => I removed the nulls with a where clause on this one, but the next one will have a case statement.
+--With a WHERE clause.
 SELECT g.GuestName AS 'Guest Name', c.ClassName
 FROM Guests g
 LEFT JOIN Classes c on c.ID = 
@@ -748,7 +748,7 @@ LEFT JOIN Classes c on c.ID =
 where ClassName is NOT NULL
 Group By g.GuestName, c.ClassName;
 
---With a case.
+--With a case. WIP.
 SELECT g.GuestName AS 'Guest Name', c.ClassName
 FROM Guests g
 LEFT JOIN Classes c on c.ID = 
@@ -781,9 +781,11 @@ where RoomStays.StayDate > '1583-07-07' and RoomStays.StayDate < '1622-10-01';
 --    GROUP BY s.ID
 --);*/
 
+
+
+--Assignment 5
 /*Write a function to return a "report" of all users and their roles.
-*Weird error on line 792: CREATE FUNCTION MUST BE THE ONLY STATEMENT IN THE BATCH
-*The function runs fine, but it looks like an error in SQL Server window.
+*The function creates/runs fine, but looks like there is an error on the create line in ssms.
 */
 IF OBJECT_ID (N'dbo.runGuestReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runGuestReport;
@@ -795,7 +797,7 @@ RETURN
     SELECT
 		e.ID,
 		e.EmployeeName,
-		r.roleName
+		r.RoleName
 	FROM
 		Employees e
 	JOIN Roles r on r.ID = e.RoleID;
@@ -803,8 +805,10 @@ RETURN
 --To run:
 select * from dbo.runGuestReport();
 
+
+
 --Function to return all classes and the count of guests that hold those classes.
---Almost working, counts aren't right. Leaving out 3 Classes.
+--WIP
 IF OBJECT_ID (N'dbo.runClassesReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runClassesReport;
 GO
@@ -812,31 +816,39 @@ CREATE FUNCTION dbo.runClassesReport()
 RETURNS TABLE
 AS
 RETURN
-    SELECT
+	select
 		c.ID,
-		c.ClassName,
-		ClassCount.Counts
-	FROM
+		c.ClassName
+		--() as Counts
+		
+	from
 		Classes c
 	join GuestClasses gc on gc.ClassID = c.ID
 	join
-		(select 
-			count(c2.ClassName)as Counts 
-		from Classes c2 
-		join GuestClasses gc2 on c2.ID = gc2.ClassID 
-		group by c2.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
-	GROUP BY c.ID, c.ClassName, ClassCount.Counts;
+		(select gc.ClassID from GuestClasses gc join Classes c on c.ID = gc.ClassID group by gc.ClassID) as ClassCounts on ClassCounts.ClassID = c.ID;
+	--group by c.ID, c.ClassName;
 
+--To run.
 select * from dbo.runClassesReport();
-
-/*
+--To check my work.
 select g.GuestName, c.ClassName
 from Guests g
 join GuestClasses gc on gc.GuestID = g.ID
-join Classes c on c.ID = gc.ClassID group by c.ClassName, g.GuestName;*/
+join Classes c on c.ID = gc.ClassID group by c.ClassName, g.GuestName;
+
+/*Scraps.
+(select count(gc2.ClassID)as Counts from Classes c2 join GuestClasses gc2 on c2.ID = gc2.ClassID group by c2.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
+(select gc2.GuestID, count(gc2.ClassID) as Counts from GuestClasses gc2 right join Classes c on c.ID = gc2.ClassID group by c.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
+    SELECT
+		c.ID as ClassID,
+		c.ClassName
+	FROM
+		Classes c
+	join GuestClasses gc on gc.ClassID = c.ID;*/
+
 
 --Function to return all guests, ordered by name (asc) and their classes and corresponding levels. Add a column that labels them beginner (1-5), intermediate (5-10), expert (10+)
---Select works, function creation does not.
+--The function creates/runs fine, but looks like there is an error on the create line in ssms.
 IF OBJECT_ID (N'dbo.runGuestExperienceReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runGuestExperienceReport;
 GO
@@ -857,11 +869,13 @@ RETURN
 	FROM
 		Guests g
 	join GuestClasses gc on gc.ClassID = g.ID
-	join Classes c on gc.ClassID = c.ID
-	order by g.GuestName asc;
+	join Classes c on gc.ClassID = c.ID;
+
+select GuestName, ClassName, ClassLevel, Experience from dbo.runGuestExperienceReport() order by GuestName;
+
 
 --Function that takes in a level and returns a "grouping" from Q3.
---Where to put the where clause?
+--WIP
 IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runLevelReport;
 GO
@@ -885,20 +899,21 @@ RETURN
 	join Classes c on gc.ClassID = c.ID
 	where ExperienceLevel = @guestExperience
 	order by g.GuestName asc;
+--Scraps.
+--IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
+--    DROP FUNCTION dbo.runLevelReport;
+--GO
+--CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
+--RETURNS TABLE
+--AS
+--RETURN
+--    (SELECT
+--		*
+--	from dbo.runGuestExperienceReport());
 
-IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
-    DROP FUNCTION dbo.runLevelReport;
-GO
-CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
-RETURNS TABLE
-AS
-RETURN
-    (SELECT
-		*
-	from dbo.runGuestExperienceReport());
 
 --Function to return a report of all open rooms on a particular day.
---Running with duplicates?
+--The function creates/runs fine, but looks like there is an error on the create line in ssms.
 IF OBJECT_ID (N'dbo.runRoomReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runRoomReport;
 GO
@@ -906,7 +921,7 @@ CREATE FUNCTION dbo.runRoomReport(@stayDay date)
 RETURNS TABLE
 AS
 RETURN
-    select 
+    select distinct
 		r.ID as RoomID,
 		t.TavernName,
 		s.StatusName
@@ -916,12 +931,15 @@ RETURN
 	join RoomStays rs on rs.RoomID = r.ID
 	where s.ID = 4 AND rs.StayDate = @stayDay;
 
+--To run.
 select * from dbo.runRoomReport('1597-12-02');
 
-select * from RoomStays;
-select * from Rooms where Rooms.ID = 2 AND Rooms.StatusID = 4;
+--select * from RoomStays;
+--select * from Rooms where Rooms.ID = 2 AND Rooms.StatusID = 4;
+
 
 --Function to return a report of prices in a range.
+--The function creates/runs fine, but looks like there is an error on the create line in ssms.
 IF OBJECT_ID (N'dbo.runPriceReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runPriceReport;
 GO
@@ -943,13 +961,16 @@ RETURN
 select * from dbo.runPriceReport(100.00, 200.00);
 
 --Stored Procedure that uses the result form 6 to Create a Room in another tavern that undercuts (is less than) the cheapest room by a penny.
+--The SP creates/runs fine, but looks like there is an error on the create line in ssms.
 CREATE PROCEDURE undercutTheCompetition
-@lowPrice money, @highPrice money
+@lowPrice money,
+@highPrice money
 AS
-	select
-		min(Result.RoomRate)
-	from
-	(select * from dbo.runPriceReport(100.00, 200.00)) as Result
-GO;
+	INSERT INTO Rooms(TavernID, StatusID, RoomRate)
+	VALUES
+		(1, 4, (select min(Result.RoomRate) - .01 from (select * from dbo.runPriceReport(@lowPrice, @highPrice)) as Result))
+GO
 
-EXEC undercutTheCompetition;
+EXEC undercutTheCompetition @lowPrice = 100.00, @highPrice = 200.00;
+
+select * from Rooms;
