@@ -714,7 +714,6 @@ group by Guests.ID, Guests.GuestName, Guests.Birthday, Guests.CakeDay, Guests.No
 having count(Guests.ID) > 1;
 
 ----Return guests with ONLY their highest level class.
-----Stuck
 select g.GuestName, c.ClassName, MaxLevel.MaxLevel
 from Guests as g
 join GuestClasses as gc on gc.GuestID = g.ID
@@ -749,15 +748,15 @@ where ClassName is NOT NULL
 Group By g.GuestName, c.ClassName;
 
 --With a case. WIP.
-SELECT g.GuestName AS 'Guest Name', c.ClassName
-FROM Guests g
-LEFT JOIN Classes c on c.ID = 
-        (select TOP 1 gc2.ClassID
-         from GuestClasses gc2
-         where gc2.GuestID = g.Id
-         order by gc2.ClassLevel desc
-        )
-Group By g.GuestName, c.ClassName;
+--SELECT g.GuestName AS 'Guest Name', c.ClassName
+--FROM Guests g
+--LEFT JOIN Classes c on c.ID = 
+--        (select TOP 1 gc2.ClassID
+--         from GuestClasses gc2
+--         where gc2.GuestID = g.Id
+--         order by gc2.ClassLevel desc
+--        )
+--Group By g.GuestName, c.ClassName;
 
 
 ----Return guests that stay within a date range.
@@ -808,7 +807,7 @@ select * from dbo.runGuestReport();
 
 
 --Function to return all classes and the count of guests that hold those classes.
---WIP
+--Done! Except that Mage Class is +1 off on count?
 IF OBJECT_ID (N'dbo.runClassesReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runClassesReport;
 GO
@@ -816,17 +815,14 @@ CREATE FUNCTION dbo.runClassesReport()
 RETURNS TABLE
 AS
 RETURN
-	select
+	SELECT
 		c.ID,
-		c.ClassName
-		--() as Counts
-		
+		c.ClassName,
+		count(c.ClassName) as ClassCounts
 	from
 		Classes c
-	join GuestClasses gc on gc.ClassID = c.ID
-	join
-		(select gc.ClassID from GuestClasses gc join Classes c on c.ID = gc.ClassID group by gc.ClassID) as ClassCounts on ClassCounts.ClassID = c.ID;
-	--group by c.ID, c.ClassName;
+	join GuestClasses gc on c.ID = gc.ClassID
+	group by c.ID, c.ClassName;
 
 --To run.
 select * from dbo.runClassesReport();
@@ -836,15 +832,7 @@ from Guests g
 join GuestClasses gc on gc.GuestID = g.ID
 join Classes c on c.ID = gc.ClassID group by c.ClassName, g.GuestName;
 
-/*Scraps.
-(select count(gc2.ClassID)as Counts from Classes c2 join GuestClasses gc2 on c2.ID = gc2.ClassID group by c2.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
-(select gc2.GuestID, count(gc2.ClassID) as Counts from GuestClasses gc2 right join Classes c on c.ID = gc2.ClassID group by c.ClassName) as ClassCount on gc.ClassID = ClassCount.Counts
-    SELECT
-		c.ID as ClassID,
-		c.ClassName
-	FROM
-		Classes c
-	join GuestClasses gc on gc.ClassID = c.ID;*/
+
 
 
 --Function to return all guests, ordered by name (asc) and their classes and corresponding levels. Add a column that labels them beginner (1-5), intermediate (5-10), expert (10+)
@@ -875,41 +863,27 @@ select GuestName, ClassName, ClassLevel, Experience from dbo.runGuestExperienceR
 
 
 --Function that takes in a level and returns a "grouping" from Q3.
---WIP
+--The function creates/runs fine, but looks like there is an error on the create line in ssms.
 IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
     DROP FUNCTION dbo.runLevelReport;
 GO
-CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
+CREATE FUNCTION dbo.runLevelReport(@guestLevel integer)
 RETURNS TABLE
 AS
 RETURN
-    SELECT
-		g.GuestName,
-		c.ClassName,
-		gc.ClassLevel,
+    select
+		*
+		from dbo.runGuestExperienceReport()
+		where
+		Experience =
 		(case
-			when gc.ClassLevel >=0 AND gc.ClassLevel <=10 then 'Beginner'
-			when gc.ClassLevel >10 AND gc.ClassLevel<=20 then 'Intermediate'
-			when gc.ClassLevel >20 then 'Expert'
-			else null
-		end) as ExperienceLevel
-	FROM
-		Guests g
-	join GuestClasses gc on gc.ClassID = g.ID
-	join Classes c on gc.ClassID = c.ID
-	where ExperienceLevel = @guestExperience
-	order by g.GuestName asc;
---Scraps.
---IF OBJECT_ID (N'dbo.runLevelReport', N'FN') IS NOT NULL
---    DROP FUNCTION dbo.runLevelReport;
---GO
---CREATE FUNCTION dbo.runLevelReport(@guestExperience varchar)
---RETURNS TABLE
---AS
---RETURN
---    (SELECT
---		*
---	from dbo.runGuestExperienceReport());
+			when @guestLevel >=0 AND @guestLevel <=10 then 'Beginner'
+			when @guestLevel >10 AND @guestLevel<=20 then 'Intermediate'
+			when @guestLevel >20 then 'Expert'
+		end);
+
+--run it
+select * from dbo.runLevelReport(25);
 
 
 --Function to return a report of all open rooms on a particular day.
